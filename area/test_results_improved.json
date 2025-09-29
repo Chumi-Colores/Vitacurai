@@ -1,0 +1,924 @@
+{
+  "test_config": {
+    "expected_area_m2": 0.044944,
+    "board_size_m": 0.212,
+    "distance_meters": 0.5,
+    "images_tested": 5,
+    "successful_tests": 5
+  },
+  "statistics": {
+    "avg_error_percent": 13.577057039981872,
+    "min_error_percent": 4.756637000898162,
+    "max_error_percent": 19.452619181300456,
+    "std_error_percent": 6.759829381761237,
+    "avg_perspective_angle": 31.566659766662916
+  },
+  "individual_results": [
+    {
+      "image_name": "imagen_0.jpg",
+      "success": true,
+      "measured_area": 0.04229532541354397,
+      "expected_area": 0.044944,
+      "area_error_percent": 5.893277381755132,
+      "perspective_angle": 26.677809355918257,
+      "has_perspective": true,
+      "quality": "good",
+      "confidence": 0.8,
+      "corners_detected": [
+        [
+          1847,
+          947
+        ],
+        [
+          1864,
+          2610
+        ],
+        [
+          834,
+          2604
+        ],
+        [
+          927,
+          973
+        ]
+      ],
+      "full_result": {
+        "success": true,
+        "area_square_meters": 0.04229532541354397,
+        "width_meters": 0.1583095780172709,
+        "height_meters": 0.2671684552714159,
+        "quality": {
+          "quality": "good",
+          "description": "\u2705 Buena - Medici\u00f3n confiable",
+          "confidence": 0.8,
+          "issues": [
+            "Lados horizontales desiguales (0.897)"
+          ]
+        },
+        "perspective_info": {
+          "has_perspective": true,
+          "horizontal_ratio": 0.8935453424794885,
+          "vertical_ratio": 0.9822994216844438,
+          "perspective_angle": 26.677809355918257,
+          "confidence": "medium",
+          "side_lengths": {
+            "top": 920.3673179769042,
+            "bottom": 1030.0174755799048,
+            "left": 1633.649289168272,
+            "right": 1663.0868888906557
+          }
+        },
+        "detailed_results": {
+          "area_square_meters": 0.04229532541354397,
+          "width_meters": 0.1583095780172709,
+          "height_meters": 0.2671684552714159,
+          "side_lengths": {
+            "top": 0.14968090576786394,
+            "bottom": 0.16693825026667786,
+            "left": 0.2651026146447155,
+            "right": 0.2692342958981163
+          },
+          "validation": {
+            "side_ratios": {
+              "horizontal": 0.8966243837392214,
+              "vertical": 0.9846539563631065
+            },
+            "angles": {
+              "individual": [
+                90.79875313609398,
+                90.89479312486712,
+                92.83636188867456,
+                85.47009185036434
+              ],
+              "average": 90.0,
+              "std_deviation": 2.7387806555285925
+            },
+            "planarity": {
+              "distance_to_plane": 0.0
+            },
+            "quality_assessment": {
+              "quality": "good",
+              "description": "\u2705 Buena - Medici\u00f3n confiable",
+              "confidence": 0.8,
+              "issues": [
+                "Lados horizontales desiguales (0.897)"
+              ]
+            }
+          },
+          "corners_3d": [
+            [
+              -0.12481628676165689,
+              -0.20103299386354512,
+              0.5
+            ],
+            [
+              0.024819060922153545,
+              -0.20472572659599883,
+              0.5
+            ],
+            [
+              0.02770851709426027,
+              0.0644930638529294,
+              0.5
+            ],
+            [
+              -0.1392277415337181,
+              0.06367761465605568,
+              0.5
+            ]
+          ],
+          "side_vectors": {
+            "top": [
+              0.14963534768381043,
+              -0.003692732732453713,
+              0.0
+            ],
+            "right": [
+              0.0028894561721067268,
+              0.2692187904489282,
+              0.0
+            ],
+            "bottom": [
+              -0.1669362586279784,
+              -0.0008154491968737215,
+              0.0
+            ],
+            "left": [
+              0.014411454772061225,
+              -0.2647106085196008,
+              0.0
+            ]
+          }
+        },
+        "input_data": {
+          "image_path": "size_calculator/calibration_pipeline/calibration_images/0.jpg",
+          "original_contours": [
+            [
+              1847,
+              947
+            ],
+            [
+              1864,
+              2610
+            ],
+            [
+              834,
+              2604
+            ],
+            [
+              927,
+              973
+            ]
+          ],
+          "corrected_contours": [
+            [
+              755,
+              765
+            ],
+            [
+              1668,
+              740
+            ],
+            [
+              1687,
+              2408
+            ],
+            [
+              663,
+              2401
+            ]
+          ],
+          "distance_meters": 0.5
+        }
+      }
+    },
+    {
+      "image_name": "imagen_1.jpg",
+      "success": true,
+      "measured_area": 0.04280617706631633,
+      "expected_area": 0.044944,
+      "area_error_percent": 4.756637000898162,
+      "perspective_angle": 32.92212756313185,
+      "has_perspective": true,
+      "quality": "acceptable",
+      "confidence": 0.65,
+      "corners_detected": [
+        [
+          2096,
+          851
+        ],
+        [
+          1705,
+          2461
+        ],
+        [
+          652,
+          2222
+        ],
+        [
+          1194,
+          762
+        ]
+      ],
+      "full_result": {
+        "success": true,
+        "area_square_meters": 0.04280617706631633,
+        "width_meters": 0.1627947342483106,
+        "height_meters": 0.2629457105229468,
+        "quality": {
+          "quality": "acceptable",
+          "description": "\u26a0\ufe0f Aceptable - Revisar condiciones",
+          "confidence": 0.65,
+          "issues": [
+            "Lados horizontales desiguales (0.843)",
+            "Lados verticales desiguales (0.942)",
+            "\u00c1ngulos inconsistentes (\u03c3=9.0\u00b0)"
+          ]
+        },
+        "perspective_info": {
+          "has_perspective": true,
+          "horizontal_ratio": 0.8394100285869771,
+          "vertical_ratio": 0.9399803872889885,
+          "perspective_angle": 32.92212756313185,
+          "confidence": "medium",
+          "side_lengths": {
+            "top": 906.3801630662489,
+            "bottom": 1079.7823854832973,
+            "left": 1557.3580192107402,
+            "right": 1656.7984186375843
+          }
+        },
+        "detailed_results": {
+          "area_square_meters": 0.04280617706631633,
+          "width_meters": 0.1627947342483106,
+          "height_meters": 0.2629457105229468,
+          "side_lengths": {
+            "top": 0.14893496887218405,
+            "bottom": 0.1766544996244371,
+            "left": 0.2550303910442324,
+            "right": 0.2708610300016611
+          },
+          "validation": {
+            "side_ratios": {
+              "horizontal": 0.8430861890799042,
+              "vertical": 0.941554386921841
+            },
+            "angles": {
+              "individual": [
+                97.80598950950035,
+                89.11309409248541,
+                97.43398341061193,
+                75.64693298740231
+              ],
+              "average": 90.0,
+              "std_deviation": 8.986026879669724
+            },
+            "planarity": {
+              "distance_to_plane": 0.0
+            },
+            "quality_assessment": {
+              "quality": "acceptable",
+              "description": "\u26a0\ufe0f Aceptable - Revisar condiciones",
+              "confidence": 0.65,
+              "issues": [
+                "Lados horizontales desiguales (0.843)",
+                "Lados verticales desiguales (0.942)",
+                "\u00c1ngulos inconsistentes (\u03c3=9.0\u00b0)"
+              ]
+            }
+          },
+          "corners_3d": [
+            [
+              -0.08214171941249651,
+              -0.2376022526787071,
+              0.5
+            ],
+            [
+              0.06602559969206012,
+              -0.2225002494232802,
+              0.5
+            ],
+            [
+              0.0022163022145351738,
+              0.04073742099830955,
+              0.5
+            ],
+            [
+              -0.17008987282987284,
+              0.0017836756183583033,
+              0.5
+            ]
+          ],
+          "side_vectors": {
+            "top": [
+              0.14816731910455663,
+              0.015102003255426905,
+              0.0
+            ],
+            "right": [
+              -0.06380929747752495,
+              0.26323767042158974,
+              0.0
+            ],
+            "bottom": [
+              -0.172306175044408,
+              -0.03895374537995125,
+              0.0
+            ],
+            "left": [
+              0.08794815341737633,
+              -0.2393859282970654,
+              0.0
+            ]
+          }
+        },
+        "input_data": {
+          "image_path": "size_calculator/calibration_pipeline/calibration_images/1.jpg",
+          "original_contours": [
+            [
+              2096,
+              851
+            ],
+            [
+              1705,
+              2461
+            ],
+            [
+              652,
+              2222
+            ],
+            [
+              1194,
+              762
+            ]
+          ],
+          "corrected_contours": [
+            [
+              1020,
+              553
+            ],
+            [
+              1916,
+              643
+            ],
+            [
+              1530,
+              2260
+            ],
+            [
+              481,
+              2017
+            ]
+          ],
+          "distance_meters": 0.5
+        }
+      }
+    },
+    {
+      "image_name": "imagen_2.jpg",
+      "success": true,
+      "measured_area": 0.03670570526957979,
+      "expected_area": 0.044944,
+      "area_error_percent": 18.33013245465515,
+      "perspective_angle": 30.545857547775967,
+      "has_perspective": true,
+      "quality": "acceptable",
+      "confidence": 0.65,
+      "corners_detected": [
+        [
+          2247,
+          1156
+        ],
+        [
+          2323,
+          2669
+        ],
+        [
+          1373,
+          2642
+        ],
+        [
+          1442,
+          1008
+        ]
+      ],
+      "full_result": {
+        "success": true,
+        "area_square_meters": 0.03670570526957979,
+        "width_meters": 0.14358083474175248,
+        "height_meters": 0.25564488001201163,
+        "quality": {
+          "quality": "acceptable",
+          "description": "\u26a0\ufe0f Aceptable - Revisar condiciones",
+          "confidence": 0.65,
+          "issues": [
+            "Lados horizontales desiguales (0.866)",
+            "Lados verticales desiguales (0.924)",
+            "\u00c1ngulos inconsistentes (\u03c3=8.1\u00b0)"
+          ]
+        },
+        "perspective_info": {
+          "has_perspective": true,
+          "horizontal_ratio": 0.8612226684706544,
+          "vertical_ratio": 0.9262905254672759,
+          "perspective_angle": 30.545857547775967,
+          "confidence": "medium",
+          "side_lengths": {
+            "top": 818.4919058854522,
+            "bottom": 950.3836067609752,
+            "left": 1635.4562054668415,
+            "right": 1514.9075879405978
+          }
+        },
+        "detailed_results": {
+          "area_square_meters": 0.03670570526957979,
+          "width_meters": 0.14358083474175248,
+          "height_meters": 0.25564488001201163,
+          "side_lengths": {
+            "top": 0.13326086911455154,
+            "bottom": 0.15390080036895346,
+            "left": 0.2657808723687543,
+            "right": 0.24550888765526896
+          },
+          "validation": {
+            "side_ratios": {
+              "horizontal": 0.8658880837206768,
+              "vertical": 0.9237266981148319
+            },
+            "angles": {
+              "individual": [
+                76.72051573243687,
+                94.24955803436133,
+                90.88369862757929,
+                98.14622760562253
+              ],
+              "average": 90.0,
+              "std_deviation": 8.086182556788676
+            },
+            "planarity": {
+              "distance_to_plane": 5.965828747146094e-17
+            },
+            "quality_assessment": {
+              "quality": "acceptable",
+              "description": "\u26a0\ufe0f Aceptable - Revisar condiciones",
+              "confidence": 0.65,
+              "issues": [
+                "Lados horizontales desiguales (0.866)",
+                "Lados verticales desiguales (0.924)",
+                "\u00c1ngulos inconsistentes (\u03c3=8.1\u00b0)"
+              ]
+            }
+          },
+          "corners_3d": [
+            [
+              -0.040956663803553534,
+              -0.19557592170747293,
+              0.49999999999999994
+            ],
+            [
+              0.09007629740062616,
+              -0.17131026047128203,
+              0.5
+            ],
+            [
+              0.10201748367614885,
+              0.07390805448104926,
+              0.5
+            ],
+            [
+              -0.05183323894805641,
+              0.06998230586271942,
+              0.5
+            ]
+          ],
+          "side_vectors": {
+            "top": [
+              0.13103296120417968,
+              0.024265661236190894,
+              5.551115123125783e-17
+            ],
+            "right": [
+              0.011941186275522694,
+              0.2452183149523313,
+              0.0
+            ],
+            "bottom": [
+              -0.15385072262420527,
+              -0.0039257486183298385,
+              0.0
+            ],
+            "left": [
+              0.010876575144502874,
+              -0.2655582275701923,
+              -5.551115123125783e-17
+            ]
+          }
+        },
+        "input_data": {
+          "image_path": "size_calculator/calibration_pipeline/calibration_images/2.jpg",
+          "original_contours": [
+            [
+              2247,
+              1156
+            ],
+            [
+              2323,
+              2669
+            ],
+            [
+              1373,
+              2642
+            ],
+            [
+              1442,
+              1008
+            ]
+          ],
+          "corrected_contours": [
+            [
+              1267,
+              801
+            ],
+            [
+              2065,
+              950
+            ],
+            [
+              2141,
+              2464
+            ],
+            [
+              1198,
+              2441
+            ]
+          ],
+          "distance_meters": 0.5
+        }
+      }
+    },
+    {
+      "image_name": "imagen_3.jpg",
+      "success": true,
+      "measured_area": 0.053686785164843674,
+      "expected_area": 0.044944,
+      "area_error_percent": 19.452619181300456,
+      "perspective_angle": 33.843752183244256,
+      "has_perspective": true,
+      "quality": "acceptable",
+      "confidence": 0.65,
+      "corners_detected": [
+        [
+          1186,
+          2337
+        ],
+        [
+          1447,
+          500
+        ],
+        [
+          2394,
+          848
+        ],
+        [
+          2377,
+          2576
+        ]
+      ],
+      "full_result": {
+        "success": true,
+        "area_square_meters": 0.053686785164843674,
+        "width_meters": 0.18207836544814743,
+        "height_meters": 0.2948553774233693,
+        "quality": {
+          "quality": "acceptable",
+          "description": "\u26a0\ufe0f Aceptable - Revisar condiciones",
+          "confidence": 0.65,
+          "issues": [
+            "Lados horizontales desiguales (0.846)",
+            "Lados verticales desiguales (0.925)",
+            "\u00c1ngulos inconsistentes (\u03c3=12.9\u00b0)"
+          ]
+        },
+        "perspective_info": {
+          "has_perspective": true,
+          "horizontal_ratio": 0.8305594287712585,
+          "vertical_ratio": 0.9313561674465936,
+          "perspective_angle": 33.843752183244256,
+          "confidence": "medium",
+          "side_lengths": {
+            "top": 1008.9167458219731,
+            "bottom": 1214.7435943440903,
+            "left": 1855.4487327867616,
+            "right": 1728.083620661917
+          }
+        },
+        "detailed_results": {
+          "area_square_meters": 0.053686785164843674,
+          "width_meters": 0.18207836544814743,
+          "height_meters": 0.2948553774233693,
+          "side_lengths": {
+            "top": 0.16687231455948073,
+            "bottom": 0.19728441633681415,
+            "left": 0.306406180626325,
+            "right": 0.28330457422041355
+          },
+          "validation": {
+            "side_ratios": {
+              "horizontal": 0.8458464062087281,
+              "vertical": 0.9246046331092621
+            },
+            "angles": {
+              "individual": [
+                70.37512849136051,
+                100.27184617164899,
+                86.6531743136794,
+                102.6998510233111
+              ],
+              "average": 90.0,
+              "std_deviation": 12.875692832752158
+            },
+            "planarity": {
+              "distance_to_plane": 0.0
+            },
+            "quality_assessment": {
+              "quality": "acceptable",
+              "description": "\u26a0\ufe0f Aceptable - Revisar condiciones",
+              "confidence": 0.65,
+              "issues": [
+                "Lados horizontales desiguales (0.846)",
+                "Lados verticales desiguales (0.925)",
+                "\u00c1ngulos inconsistentes (\u03c3=12.9\u00b0)"
+              ]
+            }
+          },
+          "corners_3d": [
+            [
+              -0.04079512198431526,
+              -0.2827580622721891,
+              0.5
+            ],
+            [
+              0.11547137539513876,
+              -0.224216186975993,
+              0.5
+            ],
+            [
+              0.11095958307548633,
+              0.059052458490239546,
+              0.5
+            ],
+            [
+              -0.08257803915778912,
+              0.02078589724354027,
+              0.5
+            ]
+          ],
+          "side_vectors": {
+            "top": [
+              0.15626649737945403,
+              0.05854187529619609,
+              0.0
+            ],
+            "right": [
+              -0.00451179231965243,
+              0.28326864546623254,
+              0.0
+            ],
+            "bottom": [
+              -0.19353762223327545,
+              -0.03826656124669928,
+              0.0
+            ],
+            "left": [
+              0.04178291717347386,
+              -0.3035439595157293,
+              0.0
+            ]
+          }
+        },
+        "input_data": {
+          "image_path": "size_calculator/calibration_pipeline/calibration_images/3.jpg",
+          "original_contours": [
+            [
+              1186,
+              2337
+            ],
+            [
+              1447,
+              500
+            ],
+            [
+              2394,
+              848
+            ],
+            [
+              2377,
+              2576
+            ]
+          ],
+          "corrected_contours": [
+            [
+              1271,
+              285
+            ],
+            [
+              2213,
+              637
+            ],
+            [
+              2194,
+              2371
+            ],
+            [
+              1010,
+              2135
+            ]
+          ],
+          "distance_meters": 0.5
+        }
+      }
+    },
+    {
+      "image_name": "imagen_4.jpg",
+      "success": true,
+      "measured_area": 0.053686785164843674,
+      "expected_area": 0.044944,
+      "area_error_percent": 19.452619181300456,
+      "perspective_angle": 33.843752183244256,
+      "has_perspective": true,
+      "quality": "acceptable",
+      "confidence": 0.65,
+      "corners_detected": [
+        [
+          1186,
+          2337
+        ],
+        [
+          1447,
+          500
+        ],
+        [
+          2394,
+          848
+        ],
+        [
+          2377,
+          2576
+        ]
+      ],
+      "full_result": {
+        "success": true,
+        "area_square_meters": 0.053686785164843674,
+        "width_meters": 0.18207836544814743,
+        "height_meters": 0.2948553774233693,
+        "quality": {
+          "quality": "acceptable",
+          "description": "\u26a0\ufe0f Aceptable - Revisar condiciones",
+          "confidence": 0.65,
+          "issues": [
+            "Lados horizontales desiguales (0.846)",
+            "Lados verticales desiguales (0.925)",
+            "\u00c1ngulos inconsistentes (\u03c3=12.9\u00b0)"
+          ]
+        },
+        "perspective_info": {
+          "has_perspective": true,
+          "horizontal_ratio": 0.8305594287712585,
+          "vertical_ratio": 0.9313561674465936,
+          "perspective_angle": 33.843752183244256,
+          "confidence": "medium",
+          "side_lengths": {
+            "top": 1008.9167458219731,
+            "bottom": 1214.7435943440903,
+            "left": 1855.4487327867616,
+            "right": 1728.083620661917
+          }
+        },
+        "detailed_results": {
+          "area_square_meters": 0.053686785164843674,
+          "width_meters": 0.18207836544814743,
+          "height_meters": 0.2948553774233693,
+          "side_lengths": {
+            "top": 0.16687231455948073,
+            "bottom": 0.19728441633681415,
+            "left": 0.306406180626325,
+            "right": 0.28330457422041355
+          },
+          "validation": {
+            "side_ratios": {
+              "horizontal": 0.8458464062087281,
+              "vertical": 0.9246046331092621
+            },
+            "angles": {
+              "individual": [
+                70.37512849136051,
+                100.27184617164899,
+                86.6531743136794,
+                102.6998510233111
+              ],
+              "average": 90.0,
+              "std_deviation": 12.875692832752158
+            },
+            "planarity": {
+              "distance_to_plane": 0.0
+            },
+            "quality_assessment": {
+              "quality": "acceptable",
+              "description": "\u26a0\ufe0f Aceptable - Revisar condiciones",
+              "confidence": 0.65,
+              "issues": [
+                "Lados horizontales desiguales (0.846)",
+                "Lados verticales desiguales (0.925)",
+                "\u00c1ngulos inconsistentes (\u03c3=12.9\u00b0)"
+              ]
+            }
+          },
+          "corners_3d": [
+            [
+              -0.04079512198431526,
+              -0.2827580622721891,
+              0.5
+            ],
+            [
+              0.11547137539513876,
+              -0.224216186975993,
+              0.5
+            ],
+            [
+              0.11095958307548633,
+              0.059052458490239546,
+              0.5
+            ],
+            [
+              -0.08257803915778912,
+              0.02078589724354027,
+              0.5
+            ]
+          ],
+          "side_vectors": {
+            "top": [
+              0.15626649737945403,
+              0.05854187529619609,
+              0.0
+            ],
+            "right": [
+              -0.00451179231965243,
+              0.28326864546623254,
+              0.0
+            ],
+            "bottom": [
+              -0.19353762223327545,
+              -0.03826656124669928,
+              0.0
+            ],
+            "left": [
+              0.04178291717347386,
+              -0.3035439595157293,
+              0.0
+            ]
+          }
+        },
+        "input_data": {
+          "image_path": "size_calculator/calibration_pipeline/calibration_images/4.jpg",
+          "original_contours": [
+            [
+              1186,
+              2337
+            ],
+            [
+              1447,
+              500
+            ],
+            [
+              2394,
+              848
+            ],
+            [
+              2377,
+              2576
+            ]
+          ],
+          "corrected_contours": [
+            [
+              1271,
+              285
+            ],
+            [
+              2213,
+              637
+            ],
+            [
+              2194,
+              2371
+            ],
+            [
+              1010,
+              2135
+            ]
+          ],
+          "distance_meters": 0.5
+        }
+      }
+    }
+  ]
+}
