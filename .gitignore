@@ -1,3 +1,42 @@
 depth_anything_v2_metric_vkitti_vitl.pth
 0. PUBLICIDAD/
 Depth-Anything-V2/
+
+# Archivos de caché Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Archivos de distribución / packaging
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Archivos temporales
+*.tmp
+*.log
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# MacOS
+.DS_Store
