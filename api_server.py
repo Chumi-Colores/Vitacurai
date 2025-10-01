@@ -4,7 +4,7 @@ Servidor principal de la API Vitacurai.
 Este módulo configura y ejecuta el servidor FastAPI con todos los endpoints.
 """
 
-from fastapi import FastAPI, File, UploadFile, Form, Depends, HTTPException
+from fastapi import FastAPI, File, UploadFile, Form, Depends, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from typing import List
@@ -13,6 +13,11 @@ import uvicorn
 from api.models import CalibrationRequest, CalibrationResponse, HealthResponse, AreaCalculationRequest, AreaCalculationResponse
 from api.controllers import CalibrationController, HealthController, AreaController
 
+# Algoritmo de Domingo
+from get_pixel_vectors import get_pixel_vectors
+from get_3D_coordinates import get_3D_coordinates
+from get_surface import get_surface
+from get_dimentions import get_dimentions
 
 # Crear instancia de FastAPI
 app = FastAPI(
@@ -80,10 +85,7 @@ async def root():
 
 @app.post("/calibrar", response_model=CalibrationResponse, tags=["Calibración"])
 async def calibrate_camera(
-    images: List[UploadFile] = File(..., description="Lista de imágenes del tablero de ajedrez (mínimo 5)"),
-    pattern_size_cols: int = Form(8, description="Número de columnas de esquinas internas del tablero"),
-    pattern_size_rows: int = Form(5, description="Número de filas de esquinas internas del tablero"),
-    square_size_mm: float = Form(26.5, description="Tamaño real de cada cuadrado en milímetros")
+    request: Request
 ):
     """
     Calibra una cámara usando imágenes de un tablero de ajedrez.
@@ -102,19 +104,17 @@ async def calibrate_camera(
     - Centro óptico (cx, cy)
     - Métricas de calidad
     - Metadatos del proceso
-    
-    **Ejemplo de uso:**
-    ```bash
-    curl -X POST "http://localhost:8000/calibrar" \\
-         -F "images=@imagen1.jpg" \\
-         -F "images=@imagen2.jpg" \\
-         -F "images=@imagen3.jpg" \\
-         -F "pattern_size_cols=8" \\
-         -F "pattern_size_rows=5" \\
-         -F "square_size_mm=26.5"
-    ```
     """
+
+
     try:
+        form_data = await request.form()
+
+        images = form_data.getlist('images')
+        pattern_size_cols = int(form_data.get('pattern_size_cols', 8))
+        pattern_size_rows = int(form_data.get('pattern_size_rows', 5))
+        square_size_mm = float(form_data.get('square_size_mm', 26.5))
+       
         # Crear objeto request con los parámetros
         calibration_request = CalibrationRequest(
             pattern_size=[pattern_size_cols, pattern_size_rows],
@@ -143,14 +143,7 @@ async def calibrate_camera(
 # ============================================
 
 @app.post("/calcular_area", response_model=AreaCalculationResponse, tags=["Área"])
-async def calculate_area(
-    image: UploadFile = File(..., description="Imagen del cartel a medir (JPG/PNG)"),
-    vertices: str = Form(..., description="Coordenadas de vértices como JSON: [[x1,y1], [x2,y2], [x3,y3], [x4,y4]]"),
-    physical_distance: float = Form(..., description="Distancia física de la cámara al cartel en metros"),
-    focal_length: str = Form(..., description="Distancia focal como JSON: [fx, fy]"),
-    optical_center: str = Form(..., description="Centro óptico como JSON: [cx, cy]"),
-    distortion_coefs: str = Form(..., description="Coeficientes de distorsión como JSON: [k1, k2, p1, p2, k3]")
-):
+async def calculate_area(request: Request):
     """
     Calcula las dimensiones y área de un cartel rectangular usando una imagen y coordenadas de vértices.
     
@@ -170,30 +163,51 @@ async def calculate_area(
     - Ángulos promedio y desviación estándar
     - Observaciones sobre la calidad
     - Información detallada del cálculo
-    
-    **Ejemplo de uso:**
-    ```bash
-    curl -X POST "http://localhost:8000/calcular_area" \\
-         -F "image=@cartel.jpg" \\
-         -F "vertices=[[100, 100], [400, 120], [380, 300], [80, 280]]" \\
-         -F "physical_distance=2.5" \\
-         -F "focal_length=[800.0, 800.0]" \\
-         -F "optical_center=[320.0, 240.0]" \\
-         -F "distortion_coefs=[0.1, -0.2, 0.001, 0.002, 0.05]"
-    ```
     """
     try:
-        # Llamar al controlador
-        result = await area_controller.calculate_area(
-            image=image,
-            vertices_str=vertices,
-            physical_distance=physical_distance,
-            focal_length_str=focal_length,
-            optical_center_str=optical_center,
-            distortion_coefs_str=distortion_coefs
-        )
-        return result
+        # Extraer datos del request multipart/form-data
+        form_data = await request.form()
         
+        # Obtener cada parámetro desde el form data
+        vertices = form_data.get("vertices") 
+        # physical_distance = form_data.get("physical_distance")
+        focal_distance = form_data.get("focal_distance")
+        optical_center = form_data.get("optical_center")
+        distortion_coefs = form_data.get("distortion_coefs")
+        image_link = form_data.get('image')  # en realidad esto lo obtenemos de image_link, lo dejo así por mientras para que vscode no se queje
+        image_size = form_data.get('image_size') # en realidad esto lo calculamos nosotros, lo dejo así por mientras para que vscode no se queje
+        
+        # Validar que todos los parámetros estén presentes
+        if not all([image_link, vertices, focal_distance, optical_center, distortion_coefs]):
+            raise HTTPException(
+                status_code=400,
+                detail="Faltan parámetros requeridos: image, vertices, physical_distance, focal_distance, optical_center, distortion_coefs"
+            )
+        
+        # Convertir physical_distance a float
+        # physical_distance = float(physical_distance)
+        
+        # Llamar al controlador
+        # resultMartin = await area_controller.calculate_area(
+        #     image=image,
+        #     vertices_str=vertices,
+        #     physical_distance=physical_distance,
+        #     focal_length_str=focal_distance,
+        #     optical_center_str=optical_center,
+        #     distortion_coefs_str=distortion_coefs
+        # )
+
+        vectors = get_pixel_vectors(vertices, focal_distance, optical_center, image_size)
+        tridimensional_coordinates = get_3D_coordinates(image_link, vectors, vertices)
+        surface = get_surface(tridimensional_coordinates)
+        width, height = get_dimentions(surface, tridimensional_coordinates)
+
+        resultDomingo = {
+            "height": height,
+            "width": width,
+        }
+        return resultDomingo
+
     except HTTPException:
         raise
     except Exception as e:
