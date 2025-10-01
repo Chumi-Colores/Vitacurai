@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  vitacurai-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vitacurai-api
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONPATH=/app
+      - ENVIRONMENT=production
+    volumes:
+      # Volumen para logs persistentes
+      - ./logs:/app/logs
+      # Volumen para checkpoints (modelos pre-entrenados)
+      - ./checkpoints:/app/checkpoints
+      # Volumen para archivos temporales de imágenes
+      - vitacurai_temp:/tmp
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - vitacurai-network
+
+  # Servicio opcional para desarrollo - base de datos
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: vitacurai-redis
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - redis_data:/data
+  #   restart: unless-stopped
+  #   networks:
+  #     - vitacurai-network
+
+volumes:
+  vitacurai_temp:
+  # redis_data:
+
+networks:
+  vitacurai-network:
+    driver: bridge

@@ -1,0 +1,25 @@
+# FastAPI y servidor web
+fastapi>=0.100.0
+uvicorn[standard]>=0.23.0
+
+# Procesamiento de imágenes y visión por computadora
+opencv-python-headless>=4.8.0
+numpy>=1.24.0
+Pillow>=10.0.0
+
+# Requests para HTTP
+requests>=2.31.0
+
+# Procesamiento científico (versiones ligeras)
+scipy>=1.11.0
+
+# Utilidades adicionales
+python-multipart>=0.0.6
+pydantic>=2.0.0
+
+# Para desarrollo y debugging
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+
+# Procesamiento de imágenes adicional
+scikit-image>=0.22.0
