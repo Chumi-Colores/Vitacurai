@@ -15,7 +15,8 @@ def publicity_size_calculator():
     focal_distance = data.get('focal_distance')
     image = data.get('image')  # en realidad esto lo obtenemos de image_link, lo dejo así por mientras para que vscode no se queje
     image_size = data.get('image_size') # en realidad esto lo calculamos nosotros, lo dejo así por mientras para que vscode no se queje
-    # Dummy response
+    
+    # Flujo del algoritmo, solo falta recibir la información, averigua cómo se llaman los atributos que mandan
     vectors = get_pixel_vectors(vertices, focal_distance, image_size)
     tridimensional_coordinates = get_3D_coordinates(image, vectors, vertices)
     surface = get_surface(tridimensional_coordinates)
@@ -28,7 +29,11 @@ def publicity_size_calculator():
 
     return jsonify(result)
 
-
+@app.route('/calibration', methods=['POST'])
+def calibration():
+    # TODO: Implement calibration logic
+    time.sleep(2)  # Simulate processing time
+    return jsonify({"status": "calibration completed"})
 
 if __name__ == '__main__':
     app.run()
