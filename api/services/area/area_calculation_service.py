@@ -35,33 +35,20 @@ class AreaCalculationService:
         self._setup_calculation_modules()
     
     def _setup_calculation_modules(self):
-        """Configura la ruta para importar los módulos de cálculo del sistema."""
-        # Obtener ruta a los módulos del sistema de cálculo
-        current_dir = Path(__file__).parent
-        project_root = current_dir.parent.parent.parent
-        size_calculator_path = project_root / "area" / "size_calculator"
-        
-        # Agregar rutas al path si no están ya
-        size_calculator_str = str(size_calculator_path)
-        if size_calculator_str not in sys.path:
-            sys.path.insert(0, size_calculator_str)
-        
-        # Importar módulos del sistema
+        """Configura los módulos de cálculo internos de la API."""
+        # Importar módulos internos de la API
         try:
-            global validate_and_order_contours, correct_image_and_contours_with_params
-            global project_pixels_to_3d, calculate_rectangle_area
+            from .modules.image_preprocessing import validate_and_order_contours
+            from .modules.inverse_projection import project_pixels_to_3d
+            from .modules.geometric_calculation import calculate_rectangle_area
             
-            from image_preprocessing import validate_and_order_contours
-            from inverse_projection import project_pixels_to_3d
-            from geometric_calculation import calculate_rectangle_area
-            
-            # Crear función personalizada para corrección con parámetros directos
+            # Asignar funciones a variables de instancia
             self._validate_and_order_contours = validate_and_order_contours
             self._project_pixels_to_3d = project_pixels_to_3d
             self._calculate_rectangle_area = calculate_rectangle_area
             
         except ImportError as e:
-            raise ImportError(f"No se pudieron importar los módulos de cálculo: {e}")
+            raise ImportError(f"No se pudieron importar los módulos internos de cálculo: {e}")
     
     def _print(self, message: str):
         """Imprime mensaje solo si verbose=True."""

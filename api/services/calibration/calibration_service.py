@@ -28,24 +28,13 @@ class CalibrationService:
         self._setup_calibration_module()
     
     def _setup_calibration_module(self):
-        """Configura la ruta para importar el módulo de calibración."""
-        # Obtener ruta al módulo de calibración
-        current_dir = Path(__file__).parent
-        project_root = current_dir.parent.parent.parent
-        calibration_path = project_root / "area" / "size_calculator" / "calibration_pipeline"
-        
-        # Agregar al path si no está ya
-        calibration_str = str(calibration_path)
-        if calibration_str not in sys.path:
-            sys.path.insert(0, calibration_str)
-        
-        # Importar el módulo
+        """Configura los módulos de calibración internos de la API."""
+        # Importar módulos internos de la API
         try:
-            global calibrate_from_directory
-            from calibration_api_module import calibrate_from_directory
+            from .modules.calibration_api_module import calibrate_from_directory
             self._calibrate_func = calibrate_from_directory
         except ImportError as e:
-            raise ImportError(f"No se pudo importar calibration_api_module: {e}")
+            raise ImportError(f"No se pudieron importar los módulos internos de calibración: {e}")
     
     async def calibrate_camera(self, 
                              image_files: List[UploadFile],
