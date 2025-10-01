@@ -1,0 +1,39 @@
+{
+  "success": true,
+  "area_square_meters": 0.024083,
+  "width_meters": 0.1989,
+  "height_meters": 0.1211,
+  "parallel_sides_ratios": {
+    "horizontal": 0.992,
+    "vertical": 0.988
+  },
+  "average_angles": {
+    "mean": 90.0,
+    "std_deviation": 4.9
+  },
+  "quality": {
+    "level": "good",
+    "description": "✅ Buena - Medición confiable",
+    "confidence_percent": 80.0
+  },
+  "observations": [
+    "Ángulos inconsistentes (σ=4.9°)"
+  ],
+  "calculation_info": {
+    "perspective_corrected": false,
+    "perspective_angle": 0.0,
+    "physical_distance_meters": 1.5,
+    "original_vertices": [
+      [200, 150],
+      [600, 180], 
+      [580, 420],
+      [180, 390]
+    ],
+    "corrected_contours": [
+      [146, 116],
+      [552, 168],
+      [541, 415], 
+      [138, 366]
+    ]
+  }
+}
