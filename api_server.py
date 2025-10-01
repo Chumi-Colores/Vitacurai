@@ -10,8 +10,8 @@ from fastapi.responses import JSONResponse
 from typing import List
 import uvicorn
 
-from api.models import CalibrationRequest, CalibrationResponse, HealthResponse
-from api.controllers import CalibrationController, HealthController
+from api.models import CalibrationRequest, CalibrationResponse, HealthResponse, AreaCalculationRequest, AreaCalculationResponse
+from api.controllers import CalibrationController, HealthController, AreaController
 
 
 # Crear instancia de FastAPI
@@ -35,6 +35,7 @@ app.add_middleware(
 # Inicializar controladores
 calibration_controller = CalibrationController()
 health_controller = HealthController()
+area_controller = AreaController()
 
 
 # ============================================
@@ -66,7 +67,7 @@ async def root():
         "status": "running",
         "endpoints": {
             "calibration": "/calibrar",
-            "area_calculation": "/calcular_area (próximamente)",
+            "area_calculation": "/calcular_area",
             "health": "/health",
             "docs": "/docs"
         }
@@ -138,27 +139,68 @@ async def calibrate_camera(
 
 
 # ============================================
-# ENDPOINTS DE CÁLCULO DE ÁREA (PLACEHOLDER)
+# ENDPOINTS DE CÁLCULO DE ÁREA
 # ============================================
 
-@app.post("/calcular_area", tags=["Área"])
-async def calculate_area():
+@app.post("/calcular_area", response_model=AreaCalculationResponse, tags=["Área"])
+async def calculate_area(
+    image: UploadFile = File(..., description="Imagen del cartel a medir (JPG/PNG)"),
+    vertices: str = Form(..., description="Coordenadas de vértices como JSON: [[x1,y1], [x2,y2], [x3,y3], [x4,y4]]"),
+    physical_distance: float = Form(..., description="Distancia física de la cámara al cartel en metros"),
+    focal_length: str = Form(..., description="Distancia focal como JSON: [fx, fy]"),
+    optical_center: str = Form(..., description="Centro óptico como JSON: [cx, cy]"),
+    distortion_coefs: str = Form(..., description="Coeficientes de distorsión como JSON: [k1, k2, p1, p2, k3]")
+):
     """
-    Calcula las dimensiones de un cartel rectangular en una imagen.
+    Calcula las dimensiones y área de un cartel rectangular usando una imagen y coordenadas de vértices.
     
-    **NOTA:** Este endpoint será implementado en la siguiente fase del proyecto.
+    **Parámetros:**
+    - **image**: Imagen del cartel (JPG/PNG)
+    - **vertices**: Coordenadas de 4 vértices como JSON [[x1,y1], [x2,y2], [x3,y3], [x4,y4]]
+    - **physical_distance**: Distancia física de la cámara al cartel en metros
+    - **focal_length**: Distancia focal como JSON [fx, fy] en píxeles
+    - **optical_center**: Centro óptico como JSON [cx, cy] en píxeles  
+    - **distortion_coefs**: Coeficientes de distorsión como JSON [k1, k2, p1, p2, k3]
     
-    **Funcionalidad planeada:**
-    - Recibir imagen de un cartel publicitario
-    - Recibir coordenadas de los vértices del cartel  
-    - Usar parámetros de calibración para calcular dimensiones reales
-    - Retornar ancho y alto del cartel en centímetros
+    **Respuesta exitosa incluye:**
+    - Área del cartel en metros cuadrados
+    - Ancho y alto del cartel en metros
+    - Métricas de calidad de la medición
+    - Ratios de lados paralelos
+    - Ángulos promedio y desviación estándar
+    - Observaciones sobre la calidad
+    - Información detallada del cálculo
+    
+    **Ejemplo de uso:**
+    ```bash
+    curl -X POST "http://localhost:8000/calcular_area" \\
+         -F "image=@cartel.jpg" \\
+         -F "vertices=[[100, 100], [400, 120], [380, 300], [80, 280]]" \\
+         -F "physical_distance=2.5" \\
+         -F "focal_length=[800.0, 800.0]" \\
+         -F "optical_center=[320.0, 240.0]" \\
+         -F "distortion_coefs=[0.1, -0.2, 0.001, 0.002, 0.05]"
+    ```
     """
-    return {
-        "message": "Endpoint de cálculo de área",
-        "status": "En desarrollo",
-        "description": "Este endpoint será implementado en la siguiente fase del proyecto"
-    }
+    try:
+        # Llamar al controlador
+        result = await area_controller.calculate_area(
+            image=image,
+            vertices_str=vertices,
+            physical_distance=physical_distance,
+            focal_length_str=focal_length,
+            optical_center_str=optical_center,
+            distortion_coefs_str=distortion_coefs
+        )
+        return result
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error interno del servidor: {str(e)}"
+        )
 
 
 # ============================================

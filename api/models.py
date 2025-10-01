@@ -58,24 +58,55 @@ class CalibrationResponse(BaseModel):
 
 class AreaCalculationRequest(BaseModel):
     """
-    Modelo para request de cálculo de área (para implementación futura).
+    Modelo para request de cálculo de área de cartel.
     """
-    image_url: str = Field(description="URL de la imagen del cartel")
     vertices: List[List[float]] = Field(
-        description="Coordenadas de los vértices del cartel [[x1,y1], [x2,y2], ...]",
-        min_length=4
+        description="Coordenadas de los vértices del cartel [[x1,y1], [x2,y2], [x3,y3], [x4,y4]]",
+        min_length=4,
+        max_length=4
     )
-    focal_distance: float = Field(gt=0, description="Distancia focal en píxeles")
+    physical_distance: float = Field(
+        gt=0,
+        description="Distancia física de la cámara al cartel en metros"
+    )
+    focal_length: List[float] = Field(
+        description="Distancia focal [fx, fy] en píxeles",
+        min_length=2,
+        max_length=2
+    )
+    optical_center: List[float] = Field(
+        description="Centro óptico [cx, cy] en píxeles",
+        min_length=2,
+        max_length=2
+    )
+    distortion_coefs: List[float] = Field(
+        description="Coeficientes de distorsión [k1, k2, p1, p2, k3]",
+        min_length=5,
+        max_length=5
+    )
 
 
 class AreaCalculationResponse(BaseModel):
     """
-    Modelo para response de cálculo de área (para implementación futura).
+    Modelo para response de cálculo de área de cartel.
     """
     success: bool = Field(description="Si el cálculo fue exitoso")
-    width: Optional[float] = Field(None, description="Ancho del cartel")
-    height: Optional[float] = Field(None, description="Alto del cartel") 
-    units: str = Field(default="cm", description="Unidades de medición")
+    
+    # Resultados principales (cuando success=True)
+    area_square_meters: Optional[float] = Field(None, description="Área del cartel en metros cuadrados")
+    width_meters: Optional[float] = Field(None, description="Ancho del cartel en metros")
+    height_meters: Optional[float] = Field(None, description="Alto del cartel en metros")
+    
+    # Métricas de calidad
+    parallel_sides_ratios: Optional[Dict[str, float]] = Field(None, description="Ratios de lados paralelos")
+    average_angles: Optional[Dict[str, float]] = Field(None, description="Ángulos promedio y desviación")
+    quality: Optional[Dict[str, Any]] = Field(None, description="Información de calidad de la medición")
+    observations: Optional[List[str]] = Field(None, description="Observaciones sobre la medición")
+    
+    # Información del cálculo
+    calculation_info: Optional[Dict[str, Any]] = Field(None, description="Información detallada del cálculo")
+    
+    # Error info (cuando success=False)
     error: Optional[str] = Field(None, description="Mensaje de error si el cálculo falló")
 
 

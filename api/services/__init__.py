@@ -10,6 +10,7 @@ from typing import List, Dict, Any
 from fastapi import UploadFile
 
 from .calibration import CalibrationService
+from .area import AreaCalculationService
 
 
 class Services:
@@ -23,6 +24,7 @@ class Services:
     def __init__(self):
         """Inicializa el orquestador de servicios."""
         self.calibration_service = CalibrationService()
+        self.area_calculation_service = AreaCalculationService()
     
     async def calibrate_camera(self, 
                              image_files: List[UploadFile],
@@ -61,6 +63,40 @@ class Services:
         return self.calibration_service.validate_calibration_parameters(
             pattern_size=pattern_size,
             square_size_mm=square_size_mm
+        )
+    
+    async def calculate_area(self, 
+                           image_file: UploadFile,
+                           vertices: List[List[float]],
+                           physical_distance: float,
+                           focal_length: List[float],
+                           optical_center: List[float],
+                           distortion_coefs: List[float]) -> Dict[str, Any]:
+        """
+        Deriva la solicitud de cálculo de área al servicio especializado.
+        
+        Args:
+            image_file: Archivo de imagen del cartel
+            vertices: Coordenadas de los vértices del cartel
+            physical_distance: Distancia física de la cámara al cartel en metros
+            focal_length: Distancia focal [fx, fy] en píxeles
+            optical_center: Centro óptico [cx, cy] en píxeles
+            distortion_coefs: Coeficientes de distorsión [k1, k2, p1, p2, k3]
+            
+        Returns:
+            Diccionario JSON con resultado del cálculo de área
+        """
+        # Leer los datos de la imagen
+        image_bytes = await image_file.read()
+        
+        # Llamar al servicio con los datos de la imagen
+        return self.area_calculation_service.calculate_cartel_area(
+            image_data=image_bytes,
+            vertices=vertices,
+            physical_distance=physical_distance,
+            focal_length=tuple(focal_length),
+            optical_center=tuple(optical_center),
+            distortion_coefs=distortion_coefs
         )
 
 

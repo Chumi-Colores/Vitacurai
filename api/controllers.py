@@ -2,11 +2,11 @@
 Controladores para manejar las requests HTTP de los endpoints de la API.
 """
 
-from fastapi import HTTPException, UploadFile, File, Depends
+from fastapi import HTTPException, UploadFile, File, Depends, Form
 from typing import List
 import datetime
 
-from .models import CalibrationRequest, CalibrationResponse, HealthResponse
+from .models import CalibrationRequest, CalibrationResponse, HealthResponse, AreaCalculationRequest, AreaCalculationResponse
 from .services import services
 
 
@@ -98,11 +98,103 @@ class HealthController:
 
 class AreaController:
     """
-    Controlador para endpoints de cálculo de área (implementación futura).
+    Controlador para endpoints de cálculo de área de carteles.
     """
     
     def __init__(self):
-        """Inicializa el controlador (implementación futura)."""
+        """Inicializa el controlador."""
         pass
     
-    # TODO: Implementar calculate_area method cuando se requiera
+    async def calculate_area(self, 
+                           image: UploadFile = File(...),
+                           vertices_str: str = Form(...),
+                           physical_distance: float = Form(...),
+                           focal_length_str: str = Form(...),
+                           optical_center_str: str = Form(...),
+                           distortion_coefs_str: str = Form(...)) -> AreaCalculationResponse:
+        """
+        Endpoint para calcular el área de un cartel usando una imagen y coordenadas de vértices.
+        
+        Args:
+            image: Archivo de imagen del cartel
+            vertices_str: Coordenadas de los vértices como string JSON [[x1,y1], [x2,y2], [x3,y3], [x4,y4]]
+            physical_distance: Distancia física de la cámara al cartel en metros
+            focal_length_str: Distancia focal como string JSON [fx, fy]
+            optical_center_str: Centro óptico como string JSON [cx, cy]
+            distortion_coefs_str: Coeficientes de distorsión como string JSON [k1, k2, p1, p2, k3]
+            
+        Returns:
+            AreaCalculationResponse con área calculada y métricas de calidad
+            
+        Raises:
+            HTTPException: Si hay errores en validación o procesamiento
+        """
+        try:
+            import json
+            
+            # Validar tipo de archivo
+            if not image.content_type.startswith('image/'):
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Archivo {image.filename} no es una imagen válida"
+                )
+            
+            # Parsear parámetros JSON
+            try:
+                vertices = json.loads(vertices_str)
+                focal_length = json.loads(focal_length_str)
+                optical_center = json.loads(optical_center_str)
+                distortion_coefs = json.loads(distortion_coefs_str)
+            except json.JSONDecodeError as e:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Error al parsear parámetros JSON: {str(e)}"
+                )
+            
+            # Validar parámetros de entrada básicos
+            if not isinstance(vertices, list) or len(vertices) != 4:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Se requieren exactamente 4 vértices para el cálculo"
+                )
+            
+            if not isinstance(focal_length, list) or len(focal_length) != 2:
+                raise HTTPException(
+                    status_code=400,
+                    detail="focal_length debe tener exactamente 2 valores [fx, fy]"
+                )
+            
+            if not isinstance(optical_center, list) or len(optical_center) != 2:
+                raise HTTPException(
+                    status_code=400,
+                    detail="optical_center debe tener exactamente 2 valores [cx, cy]"
+                )
+            
+            if not isinstance(distortion_coefs, list) or len(distortion_coefs) != 5:
+                raise HTTPException(
+                    status_code=400,
+                    detail="distortion_coefs debe tener exactamente 5 valores [k1, k2, p1, p2, k3]"
+                )
+            
+            # Realizar cálculo de área usando el orquestador de servicios
+            result = await services.calculate_area(
+                image_file=image,
+                vertices=vertices,
+                physical_distance=physical_distance,
+                focal_length=focal_length,
+                optical_center=optical_center,
+                distortion_coefs=distortion_coefs
+            )
+            
+            # Convertir resultado a modelo Pydantic
+            return AreaCalculationResponse(**result)
+            
+        except HTTPException:
+            # Re-lanzar HTTPExceptions
+            raise
+        except Exception as e:
+            # Capturar cualquier otro error no manejado
+            raise HTTPException(
+                status_code=500,
+                detail=f"Error interno del servidor: {str(e)}"
+            )
