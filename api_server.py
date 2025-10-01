@@ -14,10 +14,7 @@ from api.models import CalibrationRequest, CalibrationResponse, HealthResponse, 
 from api.controllers import CalibrationController, HealthController, AreaController
 
 # Algoritmo de Domingo
-from get_pixel_vectors import get_pixel_vectors
-from get_3D_coordinates import get_3D_coordinates
-from get_surface import get_surface
-from get_dimentions import get_dimentions
+from api.algoritmo_domingo import calcular_area_domingo
 
 # Crear instancia de FastAPI
 app = FastAPI(
@@ -174,11 +171,11 @@ async def calculate_area(request: Request):
         focal_distance = form_data.get("focal_distance")
         optical_center = form_data.get("optical_center")
         distortion_coefs = form_data.get("distortion_coefs")
-        image_link = form_data.get('image')  # en realidad esto lo obtenemos de image_link, lo dejo así por mientras para que vscode no se queje
+        image_url = form_data.get('image_url')  # en realidad esto lo obtenemos de image_link, lo dejo así por mientras para que vscode no se queje
         image_size = form_data.get('image_size') # en realidad esto lo calculamos nosotros, lo dejo así por mientras para que vscode no se queje
         
         # Validar que todos los parámetros estén presentes
-        if not all([image_link, vertices, focal_distance, optical_center, distortion_coefs]):
+        if not all([image_url, vertices, focal_distance, optical_center, distortion_coefs]):
             raise HTTPException(
                 status_code=400,
                 detail="Faltan parámetros requeridos: image, vertices, physical_distance, focal_distance, optical_center, distortion_coefs"
@@ -187,7 +184,7 @@ async def calculate_area(request: Request):
         # Convertir physical_distance a float
         # physical_distance = float(physical_distance)
         
-        # Llamar al controlador
+        # Llamar al controlador de Martín (comentado por ahora)
         # resultMartin = await area_controller.calculate_area(
         #     image=image,
         #     vertices_str=vertices,
@@ -197,15 +194,15 @@ async def calculate_area(request: Request):
         #     distortion_coefs_str=distortion_coefs
         # )
 
-        vectors = get_pixel_vectors(vertices, focal_distance, optical_center, image_size)
-        tridimensional_coordinates = get_3D_coordinates(image_link, vectors, vertices)
-        surface = get_surface(tridimensional_coordinates)
-        width, height = get_dimentions(surface, tridimensional_coordinates)
-
-        resultDomingo = {
-            "height": height,
-            "width": width,
-        }
+        # Usar algoritmo de Domingo
+        resultDomingo = calcular_area_domingo(
+            vertices=vertices,
+            focal_distance=focal_distance,
+            optical_center=optical_center,
+            image_url=image_url,
+            image_size=image_size
+        )
+        
         return resultDomingo
 
     except HTTPException:
