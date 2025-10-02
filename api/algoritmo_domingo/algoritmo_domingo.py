@@ -68,7 +68,14 @@ def calcular_area_domingo(vertices: Union[str, List],
     """
     try:
         import json
-        
+
+        # Imprimimos los datos recibidos para depuración
+        print(f"🔧 Algoritmo de Domingo - Parámetros recibidos:"
+                f"\n   📍 Vértices: {type(vertices)}"
+                f"\n   🔍 Distancia focal: {type(focal_distance)}"
+                f"\n   🎯 Centro óptico: {type(optical_center)}"
+                f"\n   📐 Tamaño imagen: {type(image_size)}")
+        print(f"   🖼️ URL Imagen: {type(image_url)}")
         # Parsear parámetros si vienen como strings JSON
         if isinstance(vertices, str):
             vertices = json.loads(vertices)

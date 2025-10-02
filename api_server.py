@@ -82,7 +82,10 @@ async def root():
 
 @app.post("/calibrar", response_model=CalibrationResponse, tags=["Calibración"])
 async def calibrate_camera(
-    request: Request
+    images: List[UploadFile] = File(..., description="Lista de imágenes JPG/PNG del tablero de ajedrez (mínimo 5, recomendado 10-20)"),
+    pattern_size_cols: int = Form(8, description="Número de esquinas internas en columnas"),
+    pattern_size_rows: int = Form(5, description="Número de esquinas internas en filas"),
+    square_size_mm: float = Form(26.5, description="Tamaño real de cada cuadrado en milímetros")
 ):
     """
     Calibra una cámara usando imágenes de un tablero de ajedrez.
@@ -102,16 +105,7 @@ async def calibrate_camera(
     - Métricas de calidad
     - Metadatos del proceso
     """
-
-
     try:
-        form_data = await request.form()
-
-        images = form_data.getlist('images')
-        pattern_size_cols = int(form_data.get('pattern_size_cols', 8))
-        pattern_size_rows = int(form_data.get('pattern_size_rows', 5))
-        square_size_mm = float(form_data.get('square_size_mm', 26.5))
-       
         # Crear objeto request con los parámetros
         calibration_request = CalibrationRequest(
             pattern_size=[pattern_size_cols, pattern_size_rows],
@@ -140,15 +134,22 @@ async def calibrate_camera(
 # ============================================
 
 @app.post("/calcular_area", response_model=AreaCalculationResponse, tags=["Área"])
-async def calculate_area(request: Request):
+async def calculate_area(
+    image: UploadFile = File(..., description="Imagen del cartel (JPG/PNG)"),
+    vertices: List[List[int]] = Form(..., description="Coordenadas de 4 vértices como JSON [[x1,y1], [x2,y2], [x3,y3], [x4,y4]]"),
+    focal_distance: List[float] = Form(..., description="Distancia focal como JSON [fx, fy] en píxeles"),
+    optical_center: List[float] = Form(..., description="Centro óptico como JSON [cx, cy] en píxeles"),
+    distortion_coefs: List[float] = Form(..., description="Coeficientes de distorsión como JSON [k1, k2, p1, p2, k3]"),
+    image_url: str = Form("", description="URL de la imagen (opcional)"),
+    image_size: str = Form("", description="Tamaño de la imagen como JSON [width, height] (se calcula automáticamente si no se proporciona)")
+):
     """
     Calcula las dimensiones y área de un cartel rectangular usando una imagen y coordenadas de vértices.
     
     **Parámetros:**
     - **image**: Imagen del cartel (JPG/PNG)
     - **vertices**: Coordenadas de 4 vértices como JSON [[x1,y1], [x2,y2], [x3,y3], [x4,y4]]
-    - **physical_distance**: Distancia física de la cámara al cartel en metros
-    - **focal_length**: Distancia focal como JSON [fx, fy] en píxeles
+    - **focal_distance**: Distancia focal como JSON [fx, fy] en píxeles
     - **optical_center**: Centro óptico como JSON [cx, cy] en píxeles  
     - **distortion_coefs**: Coeficientes de distorsión como JSON [k1, k2, p1, p2, k3]
     
@@ -162,37 +163,24 @@ async def calculate_area(request: Request):
     - Información detallada del cálculo
     """
     try:
-        # Extraer datos del request multipart/form-data
-        form_data = await request.form()
-        
-        # Obtener cada parámetro desde el form data
-        vertices = form_data.get("vertices") 
-        # physical_distance = form_data.get("physical_distance")
-        focal_distance = form_data.get("focal_distance")
-        optical_center = form_data.get("optical_center")
-        distortion_coefs = form_data.get("distortion_coefs")
-        image_url = form_data.get('image_url')  # en realidad esto lo obtenemos de image_link, lo dejo así por mientras para que vscode no se queje
-        image_size = form_data.get('image_size') # en realidad esto lo calculamos nosotros, lo dejo así por mientras para que vscode no se queje
-        
-        # Validar que todos los parámetros estén presentes
-        if not all([image_url, vertices, focal_distance, optical_center, distortion_coefs]):
+        # Validar que todos los parámetros requeridos estén presentes
+        if not all([vertices, focal_distance, optical_center, distortion_coefs]):
             raise HTTPException(
                 status_code=400,
-                detail="Faltan parámetros requeridos: image, vertices, physical_distance, focal_distance, optical_center, distortion_coefs"
+                detail="Faltan parámetros requeridos: vertices, focal_distance, optical_center, distortion_coefs"
             )
         
-        # Convertir physical_distance a float
-        # physical_distance = float(physical_distance)
+        # Si no se proporciona image_size, calcular desde la imagen
+        if not image_size:
+            # Aquí podrías leer la imagen y obtener sus dimensiones
+            # Por ahora usamos valores por defecto o dejamos que el algoritmo lo maneje
+            image_size = "[]"  # El algoritmo de Domingo manejará esto
         
-        # Llamar al controlador de Martín (comentado por ahora)
-        # resultMartin = await area_controller.calculate_area(
-        #     image=image,
-        #     vertices_str=vertices,
-        #     physical_distance=physical_distance,
-        #     focal_length_str=focal_distance,
-        #     optical_center_str=optical_center,
-        #     distortion_coefs_str=distortion_coefs
-        # )
+        # Si no se proporciona image_url, usar la imagen subida
+        if not image_url:
+            # Aquí podrías guardar la imagen temporalmente y crear una URL
+            # Por ahora dejamos que el algoritmo maneje la imagen directamente
+            image_url = f"uploaded_image_{image.filename}"
 
         # Usar algoritmo de Domingo
         resultDomingo = calcular_area_domingo(
@@ -202,7 +190,16 @@ async def calculate_area(request: Request):
             image_url=image_url,
             image_size=image_size
         )
-        
+
+        # resultMartin = await area_controller.calculate_area(
+        #     image=image,
+        #     vertices_str=vertices,
+        #     image_size=image_size,
+        #     focal_length_str=focal_distance,
+        #     optical_center_str=optical_center,
+        #     distortion_coefs_str=distortion_coefs
+        # )
+
         return resultDomingo
 
     except HTTPException:
